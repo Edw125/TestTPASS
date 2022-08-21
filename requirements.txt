@@ -1,2 +1,4 @@
 django==3.2.15
 graphene-django>=2.2.0
+graphene~=2.1.9
+djangorestframework~=3.13.1

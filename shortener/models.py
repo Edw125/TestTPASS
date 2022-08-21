@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from hashlib import md5
 
 from django.db import models
@@ -11,7 +11,7 @@ from shortener.validators import validate_datetime
 
 
 def default_expiration_time():
-    return datetime.now() + timedelta(days=1)
+    return datetime.now(tz=timezone.utc) + timedelta(days=10)
 
 
 class URL(models.Model):
@@ -35,6 +35,10 @@ class URL(models.Model):
         except ValidationError as e:
             raise GraphQLError('invalid url')
 
-
-
         return super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return str(self.full_url)
